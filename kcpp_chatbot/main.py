@@ -107,7 +107,7 @@ def print_help() -> None:
     print("/image - Attach an image.")
     print("/noimages - Remove all attached images.")
     print("/exit - Exit the application.")
-    print("/help - See all commands.")
+    print("/help - Show all commands.")
     print(" ")
 
 if __name__ == "__main__":
