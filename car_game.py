@@ -1,6 +1,7 @@
 is_car_on: bool = False
 
 if __name__ == "__main__":
+    print("Welcome to Console Car Simulator! Type 'help' to see available commands.")
     while True:
         command: str = input("> ").strip().lower()
         match command:
