@@ -23,6 +23,7 @@ if __name__ == "__main__":
             if command != "exit":
                 print("Invalid guess.")
             else:
+                print("Goodbye, User!")
                 break
         else:
             lives -= 1
