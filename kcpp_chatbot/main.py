@@ -1,13 +1,22 @@
 import random
 import json
+from pydantic import BaseModel, AnyHttpUrl, conint, constr, ValidationError
+from typing import List
 import requests
 
 API_HEADERS: dict[str, str] = {
     "Content-Type": "application/json",
 }
-API_TIMEOUT: float = 1.0
+API_TIMEOUT: float = 10.0
 SETTINGS_FILE: str = "settings.json"
 SESSION_FILE: str = "session.json"
+SETTINGS_KEYS: list[str] = [
+    "api_url",
+    "max_context_length",
+    "memory",
+    "partner_first_messages",
+    "max_chat_history_turns",
+]
 RECOGNIZED_GENDERS: list[str] = [
     "Male",
     "Female",
@@ -18,7 +27,7 @@ DEFAULT_USER_GENDER: str = RECOGNIZED_GENDERS[0]
 DEFAULT_PARTNER_NAME: str = "Jane"
 DEFAULT_PARTNER_GENDER: str = RECOGNIZED_GENDERS[1]
 
-api_url: str = "https://koboldai-koboldcpp-tiefighter.hf.space/api/"
+api_url: str = "http://localhost:5001/api/"
 api_payload: dict[str, int | float | str | list[str]] = {
     "max_context_length": 4096,
     "max_length": 150,
@@ -82,6 +91,21 @@ if __name__ == "__main__":
     print("Now fully local!")
     print(" ")
 
+    print("Loading settings...")
+    with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+        settings: dict[str, int | str | list[str]] = json.load(f)
+        settings["max_context_length"] = int(settings["max_context_length"])
+        settings["max_length"] = int(settings["max_length"])
+        settings["temperature"] = float(settings["temperature"])
+        settings["tfs"] = float(settings["tfs"])
+        settings["top_a"] = float(settings["top_a"])
+        settings["top_k"] = float(settings["top_k"])
+        settings["top_p"] = float(settings["top_p"])
+        settings["min_p"] = float(settings["min_p"])
+        settings["memory"] = str(settings["memory"])
+        settings["partner_first_messages"] = list[str](settings["partner_first_messages"])
+        settings["max_chat_history_turns"] = int(settings["max_chat_history_turns"])
+        settings["api_url"] = str(settings["api_url"])
     print(api_payload["max_context_length"])
     print(api_payload["memory"])
     print(partner_first_messages)
@@ -167,5 +191,7 @@ if __name__ == "__main__":
                     payload["memory"] = payload["memory"].replace("{partner_gender}", partner_gender)
                     response: requests.Response = requests.post(f"{api_url}v1/generate", headers=API_HEADERS, json=payload)
                     show_partner_reply(response.json()["results"][0]["text"].lstrip().rstrip())
+                elif user_input.startswith("/"):
+                    print("Invalid command.")
                 else:
                     print("Cannot send empty messages!")
