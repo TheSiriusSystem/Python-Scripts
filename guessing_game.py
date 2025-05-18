@@ -1,22 +1,29 @@
 import random
 
-lives: int = 3
-secret_number: str = str(random.randint(0, 10))
+RANGE_MIN: int = 0
+RANGE_MAX: int = 10
+
+lives: int = 5
+secret_number: str = str(random.randint(RANGE_MIN, RANGE_MAX))
 
 def print_lives() -> None:
     print(f"Lives: {lives}")
 
 if __name__ == "__main__":
-    print("Guess the secret number!")
-    print(" ")
+    print(f"Guess the secret number! ({RANGE_MIN}–{RANGE_MAX})")
+    print("Type 'exit' to exit the application.")
+    print("")
     print_lives()
     while True:
-        guess: str = input("> ")
-        if guess == secret_number:
+        command: str = input("> ").strip().lower()
+        if command == secret_number:
             print("CONGRATULATIONS!")
             break
-        elif not guess.isdigit():
-            print("Invalid guess.")
+        elif not command.isdigit():
+            if command != "exit":
+                print("Invalid guess.")
+            else:
+                break
         else:
             lives -= 1
             print_lives()
