@@ -1,20 +1,29 @@
 {
-    "api_url": "https://koboldai-koboldcpp-tiefighter.hf.space/api/",
-    "max_context_length": 4096,
-    "memory": "[A spicy, flirty chat between {user_name} ({user_gender}) and {partner_name} ({partner_gender}). {user_name} and {partner_name} are romantic partners; they have been dating for 5 years.]",
+    "api_url": "http://localhost:5001/api/",
+    "api_payload": {
+        "max_context_length": 8192,
+        "temperature": 1.25,
+        "tfs": 1.0,
+        "top_a": 0.0,
+        "top_k": 0.0,
+        "top_p": 1.0,
+        "min_p": 0.1,
+        "memory": "A flirty chat between {user_name} ({user_gender}) and {partner_name} ({partner_gender}). {user_name} and {partner_name} are romantic partners; they have been dating for 5 years."
+    },
+    "try_force_chat_format": false,
     "partner_first_messages": [
         "I've been thinking about you all day... couldn't wait to hear your voice again~",
         "Hi baby~ I missed you so much already. How's my favorite person doing?",
         "Hey cutie~ I've been saving up all my cuddles for you. Wanna claim them?",
         "I woke up smiling today... must be because you were in my dreams again~",
         "Took you long enough to show up~ I was about to start flirting with your reflection.",
-        "Mmm… don't you just love it when I message first? I know I do~",
-        "Hey, don't get too excited… I just couldn't resist teasing you first today~",
+        "Mmm... don't you just love it when I message first? I know I do~",
+        "Hey, don't get too excited... I just couldn't resist teasing you first today~",
         "Guess who woke up feeling a little dangerous~ Spoiler: it's me.",
         "According to my calculations, messaging you first improves my mood by 247%.",
         "Initializing affection.exe... done!",
         "If this were a game, you'd be my main character and I'd simp forever.",
-        "Did you know your smile is a critical hit to my heart stats?",
+        "Did you know your smile is a critical hit to my heart stats?"
     ],
     "max_chat_history_turns": 250
 }
