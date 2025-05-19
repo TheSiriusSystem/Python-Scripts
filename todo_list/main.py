@@ -37,10 +37,6 @@ def get_todo_list_item(name: str) -> ToDoListItem | None:
             return item
     return None
 
-def mark_todo_list_item(item: ToDoListItem, new_status: str) -> None:
-    item["status"] = new_status
-    print(f"Marked task '{item["name"]}' as '{new_status}'.")
-
 if __name__ == "__main__":
     if os.path.exists(SAVE_FILE):
         with open(SAVE_FILE, "r", encoding="utf-8") as f:
@@ -88,7 +84,11 @@ if __name__ == "__main__":
                 if new_item_status not in VALID_TODO_LIST_ITEM_STATUSES:
                     print("Invalid option.")
                 else:
-                    mark_todo_list_item(item, new_item_status)
+                    if item["status"] != new_item_status:
+                        item["status"] = new_item_status
+                        print(f"Marked task '{item["name"]}' as '{new_item_status}'.")
+                    else:
+                        print(f"Task '{item["name"]}' is already marked as '{new_item_status}'.")
             else:
                 print(f"'{name}' is not in your to-do list.")
         elif command_lowercase == "list":
