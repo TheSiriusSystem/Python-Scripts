@@ -24,6 +24,6 @@ if __name__ == "__main__":
                 print("start - Start the car.")
                 print("stop - Stop the car.")
                 print("exit - Exit the application.")
-                print("help - See all commands.")
+                print("help - Show all commands.")
             case _:
                 print("Sorry, I don't understand that...")
