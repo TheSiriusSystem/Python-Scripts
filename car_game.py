@@ -77,6 +77,7 @@ if __name__ == "__main__":
 
     print("Welcome to Console Car Simulator!")
     print("Type 'help' to see available commands.")
+    print("")
     while True:
         command: str = input("> ").strip().lower()
         if command == "exit":
