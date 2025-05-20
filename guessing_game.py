@@ -1,61 +1,99 @@
 import random
 
 VALID_DIFFICULTIES: list[str] = [
+    "baby",
     "easy",
     "normal",
     "hard",
+    "impossible",
 ]
+LIFE_SYSTEM_DISABLER: int = -1
 
-def print_lives() -> None:
+def print_lives(lives: int) -> None:
     print(f"Lives: {lives}")
 
-if __name__ == "__main__":
+def main() -> None:
     guess_range_min: int = 1
     guess_range_max: int = 100
-    lives: int = -1
+    lives: int = LIFE_SYSTEM_DISABLER
+    disable_hints: bool = False
 
     while True:
         difficulty: str = input(f"Choose a difficulty... ({"/".join(VALID_DIFFICULTIES)}) ").strip().lower()
         if difficulty not in VALID_DIFFICULTIES:
             print(f"Invalid option. Please choose ({"/".join(VALID_DIFFICULTIES)}).")
             continue
-        if difficulty == VALID_DIFFICULTIES[0]: # Easy
+        if difficulty == VALID_DIFFICULTIES[0]: # Baby
+            guess_range_max = 10
+        elif difficulty == VALID_DIFFICULTIES[1]: # Easy
             guess_range_max = 50
-        elif difficulty == VALID_DIFFICULTIES[2]: # Hard
+        elif difficulty == VALID_DIFFICULTIES[3]: # Hard
             guess_range_min = 0
             lives = 7
+        elif difficulty == VALID_DIFFICULTIES[4]: # Impossible
+            guess_range_min = 0
+            guess_range_max = 125
+            lives = 5
+            disable_hints = True
         break
 
-    secret_number: str = str(random.randint(guess_range_min, guess_range_max))
+    secret_number: int = random.randint(guess_range_min, guess_range_max)
     attempts: int = 0
 
-    print(f"Guess the secret number! ({guess_range_min}-{guess_range_max})")
+    print(f"Guess the secret number between {guess_range_min} and {guess_range_max}!")
     print("Type 'help' to see available commands.")
     print("")
-    if lives != -1:
-        print_lives()
+    if lives != LIFE_SYSTEM_DISABLER:
+        print_lives(lives)
     while True:
         command: str = input("> ").strip().lower()
-        if command == secret_number:
-            print(f"Congratulations! You guessed the secret number ({secret_number}) in {attempts} attempt{"s" if attempts > 1 else ""}.")
-            break
-        elif not command.isdigit():
-            if command == "attempts":
-                print(f"Attempts: {attempts}")
-            elif command == "help":
-                print("attempts - See how many guesses you made.")
-                print("help - Show all commands.")
-                print("exit - Exit the application.")
-            elif command == "exit":
-                print("Goodbye, User!")
-                break
-            else:
-                print("Invalid input. Please enter a number.")
-        else:
-            attempts += 1
-            if lives != -1:
-                lives -= 1
-                print_lives()
-                if lives <= 0:
-                    print("Game Over! You ran out of lives.")
+        if command.isdigit():
+            guess: int = int(command)
+            if guess >= guess_range_min and guess <= guess_range_max:
+                attempts += 1
+                if guess == secret_number:
+                    print(f"Correct! The number is {secret_number}. You guessed it in {attempts} attempt{"s" if attempts > 1 else ""}.")
                     break
+                else:
+                    if not disable_hints:
+                        if guess < secret_number:
+                            print("Too low!")
+                        elif guess > secret_number:
+                            print("Too high!")
+                    else:
+                        print("Wrong guess!")
+
+                    if lives != LIFE_SYSTEM_DISABLER:
+                        lives -= 1
+                        if lives > 0:
+                            print_lives(lives)
+                        else:
+                            print(f"Game Over! The number was {secret_number}. Better luck next time.")
+                            break
+            else:
+                print("Invalid input.")
+        else:
+            match command:
+                case "attempts":
+                    print(f"Attempts: {attempts}")
+                case "help":
+                    print("attempts - See how many guesses you made.")
+                    print("help - Show all commands.")
+                    print("exit - Exit the application.")
+                case "exit":
+                    print("Goodbye, User!")
+                    break
+                case _:
+                    print("Invalid input. Please enter a number.")
+
+    while True:
+        play_again: str = input("Would you like to play again? (Y/N) ").strip().lower()
+        if play_again not in ["y", "n"]:
+            print("Invalid option. Please choose Y or N.")
+            continue
+        break
+    if play_again == "y":
+        main()
+
+if __name__ == "__main__":
+    main()
