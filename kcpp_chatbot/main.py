@@ -169,6 +169,46 @@ if __name__ == "__main__":
         show_partner_reply(random.choice(settings["partner_first_messages"]).replace("{user_name}", user_name).replace("{partner_name}", partner_name))
     while True:
         user_input: str = input(f"{user_name}: ").strip()
+        command: str = user_input.lower()
+        if command.startswith("/save "):
+            if 
+        elif command.startswith("/load "):
+            pass
+        elif command.startswith("/image "):
+            pass
+        elif command == "/noimages":
+            pass
+        elif command == "/help":
+            print_help()
+        elif command == "/exit":
+            break
+        else:
+            if user_input != "":
+                append_user(user_name, user_input)
+                payload: dict = settings["api_payload"].copy()
+                payload["max_length"] = MAX_OUTPUT_LENGTH
+                payload["prompt"] = "\n".join(chat_history + [f"{partner_name}:"])
+                payload["stop_sequence"] = [f"{user_name}:", f"{partner_name}:"]
+
+                # This setting attempts to enforce the chat format further by omitting the colon
+                # from the end. Typically this is not needed unless the model you use sometimes
+                # messes up the formatting.
+                if settings["try_force_chat_format"]:
+                    payload["stop_sequence"][0] = f"{user_name}"
+                    payload["stop_sequence"][1] = f"{partner_name}"
+
+                payload["memory"] = f"[{payload["memory"]}]"
+                payload["memory"] = payload["memory"].format(
+                    user_name=user_name,
+                    user_gender=user_gender,
+                    partner_name=partner_name,
+                    partner_gender=partner_gender,
+                )
+                payload["images"] = sent_images.copy()
+                #response: requests.Response = requests.post(f"{settings['api_url']}v1/generate", headers=API_HEADERS, json=payload)
+                #show_partner_reply(response.json()["results"][0]["text"].strip())
+            else:
+                print("Cannot send empty messages!")
         match user_input:
             case "/save":
                 session_name: str = input("Enter the name of the session... ").lstrip()
@@ -257,7 +297,7 @@ if __name__ == "__main__":
                         partner_gender=partner_gender,
                     )
                     payload["images"] = sent_images.copy()
-                    response: requests.Response = requests.post(f"{settings['api_url']}v1/generate", headers=API_HEADERS, json=payload)
-                    show_partner_reply(response.json()["results"][0]["text"].strip())
+                    #response: requests.Response = requests.post(f"{settings['api_url']}v1/generate", headers=API_HEADERS, json=payload)
+                    #show_partner_reply(response.json()["results"][0]["text"].strip())
                 else:
                     print("Cannot send empty messages!")
