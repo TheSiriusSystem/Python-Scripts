@@ -72,8 +72,11 @@ def command_remove(argument) -> None:
     item = get_todo_list_item(argument) if argument != "all" else None # type: ignore
     if argument == "all":
         count: int = len(todo_list)
-        todo_list.clear()
-        print(f"Removed {count} item(s).")
+        if count > 0:
+            todo_list.clear()
+            print(f"Removed {count} item{"s" if count > 1 else ""}.")
+        else:
+            print("Your to-do list is already empty.")
     elif item:
         todo_list.pop(todo_list.index(item))
         print(f"Removed item '{argument}'.")
