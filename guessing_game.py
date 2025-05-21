@@ -1,3 +1,4 @@
+import sys
 import random
 
 VALID_DIFFICULTIES: list[str] = [
@@ -7,6 +8,7 @@ VALID_DIFFICULTIES: list[str] = [
     "hard",
     "impossible",
 ]
+FORMATTED_VALID_DIFFICULTIES: str = "/".join(VALID_DIFFICULTIES)
 LIFE_SYSTEM_DISABLER: int = -1
 
 def print_lives() -> None:
@@ -20,9 +22,9 @@ if __name__ == "__main__":
         disable_hints: bool = False
 
         while True:
-            difficulty: str = input(f"Choose a difficulty... ({"/".join(VALID_DIFFICULTIES)}) ").strip().lower()
+            difficulty: str = input(f"Choose a difficulty... ({FORMATTED_VALID_DIFFICULTIES}) ").strip().lower()
             if difficulty not in VALID_DIFFICULTIES:
-                print(f"Invalid option. Please choose ({"/".join(VALID_DIFFICULTIES)}).")
+                print(f"Invalid option. Please choose ({FORMATTED_VALID_DIFFICULTIES}).")
                 continue
             if difficulty == VALID_DIFFICULTIES[0]: # Baby
                 guess_range_max = 10
@@ -83,7 +85,7 @@ if __name__ == "__main__":
                         print("exit - Exit the application.")
                     case "exit":
                         print("Goodbye, User!")
-                        break
+                        sys.exit()
                     case _:
                         print("Invalid input. Please enter a number.")
 
