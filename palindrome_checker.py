@@ -1,17 +1,22 @@
+MINIMUM_TEXT_LENGTH: int = 1
+
 if __name__ == "__main__":
     print("Welcome to the Palindrome Checker!")
-    print("Type 'exit' to exit the application.")
     while True:
-        command: str = input("> ").strip().lower()
-        if command == "exit":
-            print("Goodbye, User!")
-            break
-        else:
-            text: str = "".join(character for character in command if character.isalnum())
+        try:
+            command: str = input("> ").lower()
+            text: str = ""
+            for character in command:
+                if character.isalnum():
+                    text += character
 
-            if len(text) <= 1:
-                print("Invalid input. Please enter a text with more than 1 character.")
+            if len(text) <= MINIMUM_TEXT_LENGTH:
+                print(f"Invalid input. Please enter a text with more than {MINIMUM_TEXT_LENGTH} character{"s" if MINIMUM_TEXT_LENGTH >= 2 else ""}.")
                 continue
 
             reversed_text: str = text[::-1]
-            print(f"{reversed_text} - {"MATCH!" if text == reversed_text else "NO MATCH!"}")
+            print(f"{reversed_text} - {"Palindrome!" if text == reversed_text else "Not a palindrome!"}")
+        except KeyboardInterrupt:
+            print("") # Creates a newline.
+            print("Goodbye, User!")
+            break
