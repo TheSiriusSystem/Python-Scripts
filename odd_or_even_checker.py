@@ -5,10 +5,7 @@ if __name__ == "__main__":
         command: str = input("> ").strip().lower()
         if command.isdigit():
             number: int = int(command)
-            if number % 2 != 0:
-                print(f"{number} is odd.")
-            else:
-                print(f"{number} is even.")
+            print(f"{number} is {"odd" if number % 2 != 0 else "even"}.")
         else:
             if command == "exit":
                 print("Goodbye, User!")
