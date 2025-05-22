@@ -15,7 +15,7 @@ def print_invalid_number_warning() -> None:
 
 if __name__ == "__main__":
     while True:
-        goal_time: float = 5.0
+        goal_time: float = 5.5
 
         while True:
             difficulty: str = input(f"Choose a difficulty... ({FORMATTED_VALID_DIFFICULTIES}) ").strip().lower()
@@ -23,7 +23,7 @@ if __name__ == "__main__":
                 print(f"Invalid option. Please choose ({FORMATTED_VALID_DIFFICULTIES}).")
                 continue
             if difficulty == VALID_DIFFICULTIES[0]: # Easy
-                goal_time = 7.0
+                goal_time = 8.0
             elif difficulty == VALID_DIFFICULTIES[2]: # Hard
                 goal_time = 4.0
             elif difficulty == VALID_DIFFICULTIES[3]: # Expert
@@ -33,18 +33,22 @@ if __name__ == "__main__":
         count: int = 0
         initial_time: float = time.time()
 
-        print(f"Count from {count} to {GOAL} within {goal_time} seconds!")
+        print(f"Count from {count + 1} to {GOAL} within {goal_time} seconds!")
         print("Type 'exit' to exit the game.")
         while True:
             command: str = input("> ").strip().lower()
             if command.isdigit():
-                number: int = int(command)
-                if number == count + 1:
+                if int(command) == count + 1:
                     count += 1
+
+                    elapsed_time: float = time.time() - initial_time
+                    formatted_elapsed_time: str = "{:.2f}".format(elapsed_time)
+
+                    if elapsed_time > goal_time:
+                        print(f"Game Over! You tried to count for {formatted_elapsed_time} seconds.")
+                        break
                     if count == GOAL:
-                        elapsed_time: float = time.time() - initial_time
-                        formatted_elapsed_time: str = "{:.2f}".format(elapsed_time)
-                        print(f"Congratulations! You counted to {GOAL} in {formatted_elapsed_time} seconds." if elapsed_time <= goal_time else f"Game Over! You tried to count for {formatted_elapsed_time} seconds.")
+                        print(f"Congratulations! You counted to {GOAL} in {formatted_elapsed_time} seconds.")
                         break
                 else:
                     print_invalid_number_warning()
